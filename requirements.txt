@@ -12,6 +12,7 @@ decorator==5.1.1
 defusedxml==0.7.1
 entrypoints==0.4
 executing==0.8.3
+greenlet==1.1.2
 idna==3.3
 importlib-resources==5.4.0
 ipykernel==6.9.1
@@ -40,6 +41,7 @@ pexpect==4.8.0
 pickleshare==0.7.5
 prometheus-client==0.13.1
 prompt-toolkit==3.0.28
+psycopg2-binary==2.9.3
 ptyprocess==0.7.0
 pure-eval==0.2.2
 pycparser==2.21
@@ -52,6 +54,7 @@ pyzmq==22.3.0
 requests==2.27.1
 Send2Trash==1.8.0
 six==1.16.0
+SQLAlchemy==1.4.32
 stack-data==0.2.0
 terminado==0.13.3
 testpath==0.6.0
