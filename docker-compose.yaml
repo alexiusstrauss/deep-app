@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+    app:
+        image: deep-dev
+        container_name: deep-dev
+        build: .
+        command: sh -c "tail -f /dev/null"
+        volumes:
+            - .:/home/app
