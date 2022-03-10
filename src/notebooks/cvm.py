@@ -5,6 +5,40 @@ import pandas as pd
 from sqlalchemy import create_engine
 
 
+def start_hunter(value: int):
+    hunter = """
+==========================================
+.__                      __                   
+|  |__   __ __   ____  _/  |_   ____  _______ 
+|  |  \ |  |  \ /    \ \   __\_/ __ \ \_  __ \ 
+|   Y  \|  |  /|   |  \ |  |  \  ___/  |  | \/
+|___|  /|____/ |___|  / |__|   \___  > |__|   
+    \/             \/             \/         
+
+==========================================    
+    """
+
+    print(hunter)
+
+    print(f"Total de {len(value)} versões a serem tratadaas.")
+    print("Iniciando processo...")
+
+
+def generate_versions(ini_year: int, ini_month: int):
+    lista = []
+    from datetime import datetime
+
+    today = datetime.today()
+    for year in range(ini_year, today.year + 1):
+        for month in range(ini_month, 13):
+            if month > today.month and year == today.year:
+                break
+            else:
+                month = str(month)
+                lista.append(f"{year}{month.zfill(2)}")
+    return lista
+
+
 class CKANDataSet:
     def __init__(self, url: str, file_name: str, temp_dir: str = "tmp"):
         self.url = url
