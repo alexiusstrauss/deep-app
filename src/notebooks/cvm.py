@@ -3,6 +3,7 @@ import re
 import requests
 import pandas as pd
 from sqlalchemy import create_engine
+from configparser import ConfigParser
 
 
 def start_hunter(value: int):
@@ -46,12 +47,8 @@ class CKANDataSet:
         self.temp_dir = temp_dir
         self.df = None
         self.response = {}
-        self.config = {
-            "host": "localhost",
-            "database": "postgres",
-            "user": "postgres",
-            "password": "postgres",
-        }
+        self.config = ConfigParser()
+        self.config.read("cvm_ckan.cfg")
 
     def download(self):
         temp_file = f"{self.temp_dir}/{self.file_name}"
@@ -158,9 +155,9 @@ class CKANDataSet:
 
     def create_engine(self, config: dict):
         connect = "postgresql+psycopg2://%s:%s@%s:54325/%s" % (
-            config["user"],
-            config["password"],
-            config["host"],
-            config["database"],
+            config["DB"]["USER"],
+            config["DB"]["PASSWORD"],
+            config["DB"]["HOST"],
+            config["DB"]["DBNAME"],
         )
         return create_engine(connect)
