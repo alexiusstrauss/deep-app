@@ -154,10 +154,11 @@ class CKANDataSet:
         return True
 
     def create_engine(self, config: dict):
-        connect = "postgresql+psycopg2://%s:%s@%s:54325/%s" % (
+        connect = "postgresql+psycopg2://%s:%s@%s:%s/%s" % (
             config["DB"]["USER"],
             config["DB"]["PASSWORD"],
             config["DB"]["HOST"],
+            config["DB"]["PORT"],
             config["DB"]["DBNAME"],
         )
         return create_engine(connect)
