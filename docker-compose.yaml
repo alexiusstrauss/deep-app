@@ -1,10 +1,40 @@
 version: "3.8"
 
 services:
+
+    # database
+    postgres_cvm_db:
+        image: postgres:13-alpine
+        ports:
+            - 5432:5432
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+        volumes:
+            - type: volume
+              source: dbdata
+              target: /var/lib/postgresql
+        networks:
+            - deep-dev-net
+
     app:
         image: deep-dev
         container_name: deep-dev
         build: .
-        command: sh -c "tail -f /dev/null"
+        command: sh -c "uvicorn src.api.main:app --reload --host=0.0.0.0 --port=8000"
+        ports:
+            - 8000:8000
         volumes:
             - .:/home/app
+        networks:
+            - deep-dev-net            
+        depends_on:
+            - postgres_cvm_db
+
+volumes:
+    dbdata:
+      name: cvm-dbdata
+
+networks:
+  deep-dev-net:
+      name: deep-dev-net      

@@ -3,6 +3,41 @@ import re
 import requests
 import pandas as pd
 from sqlalchemy import create_engine
+from configparser import ConfigParser
+
+
+def start_hunter(value: int):
+    hunter = """
+==========================================
+.__                      __                   
+|  |__   __ __   ____  _/  |_   ____  _______ 
+|  |  \ |  |  \ /    \ \   __\_/ __ \ \_  __ \ 
+|   Y  \|  |  /|   |  \ |  |  \  ___/  |  | \/
+|___|  /|____/ |___|  / |__|   \___  > |__|   
+    \/             \/             \/         
+
+==========================================    
+    """
+
+    print(hunter)
+
+    print(f"Total de {len(value)} versões a serem tratadaas.")
+    print("Iniciando processo...")
+
+
+def generate_versions(ini_year: int, ini_month: int):
+    lista = []
+    from datetime import datetime
+
+    today = datetime.today()
+    for year in range(ini_year, today.year + 1):
+        for month in range(ini_month, 13):
+            if month > today.month and year == today.year:
+                break
+            else:
+                month = str(month)
+                lista.append(f"{year}{month.zfill(2)}")
+    return lista
 
 
 class CKANDataSet:
@@ -12,12 +47,8 @@ class CKANDataSet:
         self.temp_dir = temp_dir
         self.df = None
         self.response = {}
-        self.config = {
-            "host": "localhost",
-            "database": "postgres",
-            "user": "postgres",
-            "password": "postgres",
-        }
+        self.config = ConfigParser()
+        self.config.read("cvm_ckan.cfg")
 
     def download(self):
         temp_file = f"{self.temp_dir}/{self.file_name}"
@@ -123,10 +154,11 @@ class CKANDataSet:
         return True
 
     def create_engine(self, config: dict):
-        connect = "postgresql+psycopg2://%s:%s@%s:54325/%s" % (
-            config["user"],
-            config["password"],
-            config["host"],
-            config["database"],
+        connect = "postgresql+psycopg2://%s:%s@%s:%s/%s" % (
+            config["DB"]["USER"],
+            config["DB"]["PASSWORD"],
+            config["DB"]["HOST"],
+            config["DB"]["PORT"],
+            config["DB"]["DBNAME"],
         )
         return create_engine(connect)
