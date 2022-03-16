@@ -1,3 +1,4 @@
+
 import os
 import re
 import requests
@@ -6,7 +7,7 @@ from sqlalchemy import create_engine
 from configparser import ConfigParser
 
 
-def start_hunter(value: int):
+def start_hunter(value):
     hunter = """
 ==========================================
 .__                      __                   
