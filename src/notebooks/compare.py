@@ -21,9 +21,7 @@ class MzTools:
     def get_data_mzqi(self, token: str):
         headers = CaseInsensitiveDict()
         headers["Accept"] = "application/json"
-        headers = {
-            "Authorization": "Bearer " + self.token,
-        }
+        headers = {"Authorization": f"Bearer {self.token}"}
         response = requests.get(self.url, headers=headers)
         return response.json()
     

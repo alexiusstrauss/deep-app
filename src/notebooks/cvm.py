@@ -35,9 +35,8 @@ def generate_versions(ini_year: int, ini_month: int):
         for month in range(ini_month, 13):
             if month > today.month and year == today.year:
                 break
-            else:
-                month = str(month)
-                lista.append(f"{year}{month.zfill(2)}")
+            month = str(month)
+            lista.append(f"{year}{month.zfill(2)}")
     return lista
 
 
@@ -155,11 +154,6 @@ class CKANDataSet:
         return True
 
     def create_engine(self, config: dict):
-        connect = "postgresql+psycopg2://%s:%s@%s:%s/%s" % (
-            config["DB"]["USER"],
-            config["DB"]["PASSWORD"],
-            config["DB"]["HOST"],
-            config["DB"]["PORT"],
-            config["DB"]["DBNAME"],
-        )
+        connect = f'postgresql+psycopg2://{config["DB"]["USER"]}:{config["DB"]["PASSWORD"]}@{config["DB"]["HOST"]}:{config["DB"]["PORT"]}/{config["DB"]["DBNAME"]}'
+
         return create_engine(connect)
