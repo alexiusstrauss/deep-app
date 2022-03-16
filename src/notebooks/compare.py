@@ -18,21 +18,31 @@ class MZCompare:
         self.to_file = to_file
         self.url = f"https://api.mziq.com/mzfundsmng/funds/{self.found_id}/reports/profitability?startDate={self.date_in}&endDate={self.date_fin}&calculated=true&ignoreFields=value12M,value24M,value36M,value48M,day,month,year,fromStart"
 
-    def get_data(self, token: str):
+    def get_data_mzqi(self, token: str):
         headers = CaseInsensitiveDict()
         headers["Accept"] = "application/json"
         headers = {
-            "Authorization": "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MjJmNWY2ZjQyMmUzYTAwMjNjZGQyOTIiLCJpc3MiOiJNWiBHcm91cCIsImV4cCI6MTY0NzQ4MDI1MiwiaWF0IjoxNjQ3MzA3NDUyLCJhdWQiOiJNWiBDb3JlIiwibmFtZSI6IkFsZXhpdXMgTWFycXVlcyIsImVtYWlsIjoiYWxleGl1cy5tYXJxdWVzQG16Z3JvdXAuY29tIiwicmtleSI6ImNvcmU6dXNlcjo2MjJmNWY2ZjQyMmUzYTAwMjNjZGQyOTI6ZGV2aWNlOmVhM2ZkZTE2YWRiYjIxYzc5NmRjOWFlN2UzZjI4MmZjOmJlNzM2NGMwMWQ3NTcxZWRiNzBiMzkyOWU4NmMyODU4NTJhMzA3NDk2NGMwNmRiNjE0MWUwZjY2OGU3NDlkZGEiLCJsZWdhY3lVc2VySWQiOiJlYWVjOWQ0NC1lMTFiLTQyNGItYTYzZi1jOTc3ZjE0N2Q4MDQiLCJkZXZpY2VJZCI6ImVhM2ZkZTE2YWRiYjIxYzc5NmRjOWFlN2UzZjI4MmZjIiwiY3VzdG9tZXIiOnsiaWQiOiI1ZjVhNDJiNDI4M2RmOTAxYWUxN2VmNTUiLCJ2YWx1ZSI6IkFSWCBJbnZlc3RpbWVudG9zIiwiZGlzcGxheU5hbWUiOiJBUlggSW52ZXN0aW1lbnRvcyIsImxlZ2FjeUNvbXBhbnlJZCI6ImM4N2ZkNmQxLTc0MTctNDk0Mi05MWJjLWQ5OTUwNjUwYjlmNyIsImxlZ2FjeUlkIjoiYzg3ZmQ2ZDEtNzQxNy00OTQyLTkxYmMtZDk5NTA2NTBiOWY3In19.4RF6RSY4h25MAKTja5D6gak3bAlEoKUz0TMa4oIUVKwPp_L-_rmrO7woCs30JcpDsE5jF-T8vawtoPJIc-Bhkw"
+            "Authorization": "Bearer " + self.token,
         }
         response = requests.get(self.url, headers=headers)
         return response.json()
+    
+    def get_data_opendata(self):
+        return []
+    
+    # def compare(self):
+    #     data_mzqi = self.get_data_mzqi(self.token)
+    #     data_opendata = self.get_data_opendata()
+    #     with open(self.to_file, "w") as f:
+    #         f.write("date,mzqi,opendata,formula\n")
+    #         for i in range(len(data_mzqi["data"])):
+    #             f.write(
+    #                 f"{data_mzqi['data'][i]['date']},{data_mzqi['data'][i]['value']},{data_opendata[i]['value']},{self.formula(data_mzqi['data'][i]['value'], data_opendata[i]['value'])}\n"
+    #             )
 
     def formula(self, value1, value2):
         return (value2/value1) -1 * 100
 
-bearer_token = """
-eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MjJmNWY2ZjQyMmUzYTAwMjNjZGQyOTIiLCJpc3MiOiJNWiBHcm91cCIsImV4cCI6MTY0NzQ4MDI1MiwiaWF0IjoxNjQ3MzA3NDUyLCJhdWQiOiJNWiBDb3JlIiwibmFtZSI6IkFsZXhpdXMgTWFycXVlcyIsImVtYWlsIjoiYWxleGl1cy5tYXJxdWVzQG16Z3JvdXAuY29tIiwicmtleSI6ImNvcmU6dXNlcjo2MjJmNWY2ZjQyMmUzYTAwMjNjZGQyOTI6ZGV2aWNlOmVhM2ZkZTE2YWRiYjIxYzc5NmRjOWFlN2UzZjI4MmZjOmJlNzM2NGMwMWQ3NTcxZWRiNzBiMzkyOWU4NmMyODU4NTJhMzA3NDk2NGMwNmRiNjE0MWUwZjY2OGU3NDlkZGEiLCJsZWdhY3lVc2VySWQiOiJlYWVjOWQ0NC1lMTFiLTQyNGItYTYzZi1jOTc3ZjE0N2Q4MDQiLCJkZXZpY2VJZCI6ImVhM2ZkZTE2YWRiYjIxYzc5NmRjOWFlN2UzZjI4MmZjIiwiY3VzdG9tZXIiOnsiaWQiOiI1ZjVhNDJiNDI4M2RmOTAxYWUxN2VmNTUiLCJ2YWx1ZSI6IkFSWCBJbnZlc3RpbWVudG9zIiwiZGlzcGxheU5hbWUiOiJBUlggSW52ZXN0aW1lbnRvcyIsImxlZ2FjeUNvbXBhbnlJZCI6ImM4N2ZkNmQxLTc0MTctNDk0Mi05MWJjLWQ5OTUwNjUwYjlmNyIsImxlZ2FjeUlkIjoiYzg3ZmQ2ZDEtNzQxNy00OTQyLTkxYmMtZDk5NTA2NTBiOWY3In19.4RF6RSY4h25MAKTja5D6gak3bAlEoKUz0TMa4oIUVKwPp_L-_rmrO7woCs30JcpDsE5jF-T8vawtoPJIc-Bhkw
-"""
 found_id = "60b03acdfd66c40018bfecce"
 start_date = "2022-01-01"
 end_date = "2022-03-01"
