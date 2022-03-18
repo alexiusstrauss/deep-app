@@ -16,7 +16,7 @@ class ServiceStorage:
         os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./credentials.json"
         
         storage_client = storage.Client()
-        storage_client.bucket()
+        #storage_client.bucket()
         return storage_client.list_buckets()
     
     @staticmethod
