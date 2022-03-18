@@ -29,19 +29,16 @@ class ServiceStorage:
         # Uploads the file
         blob = bucket.blob(file_name)
         blob.upload_from_filename(file_path)
-        print("File {} uploaded to {}.".format(file_name, bucket_name))
+        print(f"File {file_name} uploaded to {bucket_name}.")
 
     def __get_bucket(self, bucket_name):
         """
         Return bucket instance
         """
 
-        bucket = ServiceStorage.__bucket_exists(bucket_name)
-
-        if not bucket:
-            bucket = ServiceStorage.__create_bucket(bucket_name)
-
-        return bucket
+        return ServiceStorage.__bucket_exists(
+            bucket_name
+        ) or ServiceStorage.__create_bucket(bucket_name)
 
     def __bucket_exists(self, bucket_name):
         """
